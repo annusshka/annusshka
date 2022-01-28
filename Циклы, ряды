@@ -1,0 +1,71 @@
+package com.company;
+
+import java.util.Locale;
+import java.util.Scanner;
+
+public class Main {
+
+    public static class Solution {
+        public double sumN;
+        public double sumNe;
+        public double sumNe10;
+        public double fValue;
+    }
+
+    public static Solution calc(double x, int n, double e) {
+        Solution sol = new Solution();
+        sol.fValue = Math.sqrt(1 + x);
+
+        double a = 1;
+
+        for (int i = 0; i < n || Math.abs(a) > e; i++) {
+            if (i < n) {
+                sol.sumN += a;
+            }
+            if (Math.abs(a) > e) {
+                sol.sumNe += a;
+            }
+            if (Math.abs(a) > e / 10) {
+                sol.sumNe10 += a;
+            }
+            a = next(a, i + 1, x);
+        }
+        return sol;
+    }
+
+    public static double next(double a, int i, double x) {
+        a = -1 * a * x * (2 * i - 3) / (i * 2);
+        return a;
+    }
+
+    public static void print (Solution sol) {
+        System.out.printf("Сумма n слагаемых sqrt(1 + x) = %.10f%n", sol.sumN);
+        System.out.printf("Сумма n слагаемых, которые по абсолютной величине больше e, sqrt(1 + x) = %.10f%n",
+                sol.sumNe);
+        System.out.printf("Сумма n слагаемых, которые по абсолютной величине больше e / 10, sqrt(1 + x) = %.10f%n",
+                sol.sumNe10);
+        System.out.printf("Результат функции через Math: %.10f%n", sol.fValue);
+    }
+
+    public static void main(String[] args) {
+        Locale.setDefault(Locale.ROOT);
+        Scanner scanner = new Scanner(System.in);
+
+        final int R = 1;
+
+        System.out.print("Введите x = ");
+        double x = scanner.nextDouble();
+        System.out.print("Введите n = ");
+        int n = scanner.nextInt();
+        System.out.print("Введите e = ");
+        double e = scanner.nextDouble();
+
+        Solution sol = calc (x, n, e);
+
+        if ((x >= -1 * R) && (x <= R)) {
+            print(sol);
+        } else {
+            System.out.print("х лежит вне области допустимых значений");
+        }
+    }
+}
